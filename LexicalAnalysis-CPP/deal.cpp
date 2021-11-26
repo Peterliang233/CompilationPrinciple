@@ -51,6 +51,7 @@ void check(string line){
                         if(now.size()==1){
                             cout<<"(1,0)"<<endl;
                         }else{
+                            // 检查是否是八进制
                             if(now[1]<='7'&&now[1>='1']){
                                 if(judgeOctal(now)){
                                     cout<<"(2,"<<now<<")"<<endl;
@@ -59,6 +60,7 @@ void check(string line){
                                     exit(0);
                                 }
                             }else if(now[1]=='x'){
+                                // 检查是否是十六进制
                                 if(judgeHexadecimal(now)){
                                     cout<<"(3,"<<now<<")"<<endl;
                                 }else{
@@ -71,6 +73,7 @@ void check(string line){
                             }
                         }
                     }else{
+                        // 检查是否是十进制
                         if(judgeDecimal(now)){
                             cout<<"(1,"<<now<<")"<<endl;
                         }else{
@@ -79,6 +82,7 @@ void check(string line){
                         }
                     }
                 }else{
+                    // 检查是否是标识符
                     if(judgeIdentifier(now)){
                         cout<<"(0,"<<now<<")"<<endl;
                     }else{

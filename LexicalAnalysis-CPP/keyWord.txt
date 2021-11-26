@@ -50,3 +50,8 @@ volatile
 struct
 main
 return
+include
+using
+namespace
+std
+iostream
