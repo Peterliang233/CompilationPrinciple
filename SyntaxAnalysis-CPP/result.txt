@@ -1,0 +1,4 @@
+T->bcaT
+R->aT
+R->bcaT
+R->caT

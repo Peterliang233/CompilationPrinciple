@@ -1,3 +1,6 @@
-S->Qc|c|cab
-Q->Rb|b
-R->Sa|a
+S->Qc
+S->c
+Q->Rb
+Q->b
+R->Sa
+R->a

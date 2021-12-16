@@ -3,9 +3,10 @@
 void init();  // init 初始化一些读入的参数
 void eliminateLeftRecursion();  // 消除左递归
 void deal(string s);  // 对从文件读入的字符串进行处理
+void ExecuteLeftCommonFactor(); // 提取左公因子函数
 
 void init(){
-    string filename = INPUT;
+    string filename = OUTPUT;
     ifstream fin(filename.c_str());
     string line;
     while(getline(fin,line)){
@@ -74,5 +75,27 @@ void eliminateLeftRecursion(){
                 }
             }
         }
+        // for(auto x:grammar[v[i]]){
+        //     cout<<v[i]<<" "<<x<<endl;
+        // }
     }
+    
+    // 遍历最后一个非终结符号
+    for(auto x:grammar[v[num-1]]){
+        if(x[0]!=v[num-1]){
+            cout<<v[num-1]<<"->"<<x<<"T"<<endl;
+        }else{
+            string remain="";
+            for(int i=1;i<x.size();i++){
+                remain+=x[i];
+            }
+            cout<<"T->"<<remain+"T"<<endl;
+        }
+    }
+
+}
+
+void ExecuteLeftCommonFactor() {
+        
+
 }
