@@ -9,6 +9,8 @@ void InsertLast(char key,char val);  // 执行Last插入操作
 void getFirst(); // 获得First集合
 void getLast(); // 获得Last集合
 
+void getPriorityTable(); // 获取优先分析表
+
 
 void init(){
     string filename = INPUT;
@@ -59,6 +61,7 @@ void init(){
 
     getFirst();
     getLast();
+    getPriorityTable();
 }
 
 
@@ -94,7 +97,7 @@ void getFirst(){
     // 对栈的数据进行拓展即可
     while(!st.empty()){
         auto top=st.top();
-        cout<<top.first<<" "<<top.second<<endl;
+       // cout<<top.first<<" "<<top.second<<endl;
         st.pop();
         for(auto x:suf[top.first]){
             InsertFirst(x,top.second);
@@ -103,11 +106,14 @@ void getFirst(){
 
 
     // 对结果进行检查
-    // for(auto x:ued){
-    //     for(auto y:ed){
-    //         cout<<x<<" "<<y<<" "<<first[make_pair(x,y)]<<endl;
-    //     }
-    // }
+    for(auto x:ued){
+        for(auto y:ed){
+            //cout<<x<<" "<<y<<" "<<first[make_pair(x,y)]<<endl;
+            if(first[make_pair(x,y)]){
+                firstV[x].push_back(y);
+            }
+        }
+    }
 }
 
 
@@ -145,16 +151,49 @@ void getLast(){
         auto top=st.top();
         st.pop();
         for(auto x:suf1[top.first]){
-            cout<<"x:"<<x<<endl;
+           // cout<<"x:"<<x<<endl;
             InsertLast(x,top.second);
         }
     }
 
 
     //对结果进行检查
-    // for(auto x:ued){
-    //     for(auto y:ed){
-    //         cout<<x<<" "<<y<<" "<<last[make_pair(x,y)]<<endl;
-    //     }
-    // }
+    for(auto x:ued){
+        for(auto y:ed){
+           // cout<<x<<" "<<y<<" "<<last[make_pair(x,y)]<<endl;
+            if(last[make_pair(x,y)]){
+                lastV[x].push_back(y);
+            }
+        }
+    }
+}
+
+void getPriorityTable(){
+    for(auto x:v){
+        int n=x.size();
+        for(int i=3;i<n;i++){
+            if(i+1<n&&op[x[i]]&&op[x[i+1]]){
+                table[make_pair(x[i],x[i+1])]=0;
+            }
+            if(i+2<n&&op[x[i]]&&op[x[i+2]]&&op[x[i+2]]==false){
+                table[make_pair(x[i],x[i+2])]=0;
+            }
+            if(i+1<n&&op[x[i]]&&op[x[i+1]]==false){
+                for(auto y:firstV[x[i+1]]){
+                    table[make_pair(x[i],y)]=-1;
+                }
+            }
+            if(i+1<n&&op[x[i]]==false&&op[x[i+1]]){
+                for(auto y:lastV[x[i]]){
+                    table[make_pair(y,x[i+1])]=1;
+                }
+            }
+        }
+    }
+
+    for(auto x:ed){
+        for(auto y:ed){
+            cout<<x<<" "<<y<<" "<<table[make_pair(x,y)]<<endl;
+        }
+    }
 }
