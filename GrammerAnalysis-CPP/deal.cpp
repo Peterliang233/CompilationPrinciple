@@ -12,6 +12,9 @@ void getLast(); // 获得Last集合
 void getPriorityTable(); // 获取优先分析表
 
 
+bool judge(string line); // 对程序进行判断，是否是指定的文法对应的表达式
+
+
 void init(){
     string filename = INPUT;
     ifstream fin(filename.c_str());
@@ -62,7 +65,31 @@ void init(){
     getFirst();
     getLast();
     getPriorityTable();
+
+    // 得到归约哈希, 全部都替换成X的形式
+    for(auto x:v){
+        int len=x.size();
+        string tmp="";
+        for(int i=3;i<len;i++){
+            if(op[x[i]]){
+                tmp+=x[i];
+            }else{
+                tmp+="X";
+            }
+        }
+        g[tmp]='X';
+    }
+
+    filename = EXPRESSION;
+    ifstream fin3(filename.c_str());
+    while(getline(fin3,line)){
+        // 对每个字符串进行处理，判断是否是合法的字符串
+       // judge(line);
+        cout<<line<<": "<<(judge(line)?"true":"false")<<endl;
+    }
+    fin3.close();
 }
+
 
 
 void InsertFirst(char key,char val){
@@ -169,13 +196,18 @@ void getLast(){
 }
 
 void getPriorityTable(){
+    for(auto x:ed){
+        for(auto y:ed){
+            table[make_pair(x,y)]=table[make_pair(y,x)]=-2;
+        }
+    }
     for(auto x:v){
         int n=x.size();
         for(int i=3;i<n;i++){
             if(i+1<n&&op[x[i]]&&op[x[i+1]]){
                 table[make_pair(x[i],x[i+1])]=0;
             }
-            if(i+2<n&&op[x[i]]&&op[x[i+2]]&&op[x[i+2]]==false){
+            if(i+2<n&&op[x[i]]&&op[x[i+2]]&&op[x[i+1]]==false){
                 table[make_pair(x[i],x[i+2])]=0;
             }
             if(i+1<n&&op[x[i]]&&op[x[i+1]]==false){
@@ -191,9 +223,100 @@ void getPriorityTable(){
         }
     }
 
-    for(auto x:ed){
-        for(auto y:ed){
-            cout<<x<<" "<<y<<" "<<table[make_pair(x,y)]<<endl;
+    for(auto y:firstV[k]){
+        table[make_pair('#', y)]=-1;
+    }
+    for(auto y:lastV[k]){
+        table[make_pair(y,'#')]=1;
+    }
+
+    table[make_pair('#','#')]=0;
+
+    // for(auto x:ed){
+    //     for(auto y:ed){
+    //         cout<<x<<" "<<y<<" "<<table[make_pair(x,y)]<<endl;
+    //     }
+    // }
+}
+
+
+bool judge(string s){
+    // 先对每个字符串进行处理，转化为统一的符号表示的形式
+    string str="";
+    string tmpString="";
+    for(auto c:s){
+        // 如果遇到的这个字符是一个终结符,那么我们就先判断之前的tmp字符串是否为空，如果为空，那么就不处理，否则就用一个i替代
+        if(op[c]){
+            if(tmpString.size()==0){
+                str+=c;
+            }else{
+                str+="i";
+                str+=c;
+            }
+            tmpString="";
+        }else{
+            tmpString+=c;
         }
     }
+    if(op[s[s.size()-1]]==false){
+        // 如果最后一个字符不是终结符，那么就用一个i替换tmp
+        str+="i";
+    }
+
+    str+="#";
+    cout<<str<<endl;
+    // 处理好了每个表达式之后，我们需要对字符串进行处理，判断是否是合法的表达式
+    sk[0]='#';
+    int k=0; // k表示的是栈顶的位置
+    int id=0;  // id表示的是当前的游标的位置
+    int n=str.size();
+    while(id<n){
+        cout<<"id: "<<str[id]<<endl;
+        char a=str[id];
+        int j;
+        // 如果栈顶指向的是终结符
+        if(op[sk[k]]){
+            j=k;
+        }else{
+            j=k-1;
+        }
+        // 如果sk[j]>a
+        while(table[make_pair(sk[j],a)]==1){
+            char Q;
+            while(1){
+                Q=sk[j];
+                if(op[sk[j-1]]){
+                    j-=1;
+                }else{
+                    j-=2;
+                }
+                if(table[make_pair(sk[j],Q)]==-1){
+                    break;
+                }
+            }
+            cout<<j<<" "<<k<<endl;
+            // 进行归约操作sk[j+1]...sk[k],规约成一个X
+            string tmpc="";
+            for(int t=j+1;t<=k;t++){
+                tmpc+=sk[t];
+            }
+            cout<<"tmpc: "<<tmpc<<endl;
+            k=j+1;
+            sk[k]='X';
+            cout<<"ans: ";
+            for(int t=0;t<=k;t++){
+                cout<<sk[t];
+            }
+            cout<<endl;
+        }
+        if(table[make_pair(sk[j],a)]==-1||table[make_pair(sk[j],a)]==0){
+            k=k+1;
+            sk[k]=str[id];
+            id++;
+        }else{
+            return false;
+        }
+    }
+
+    return true;
 }
