@@ -1,4 +1,11 @@
-T->bcaT
-R->aT
-R->bcaT
-R->caT
+U->bcaU
+R->aU
+R->bcaU
+R->caU
+R->cabaU
+U->@
+S->Qc
+S->c
+S->cab
+Q->Rb
+Q->b

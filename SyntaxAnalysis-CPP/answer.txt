@@ -1,0 +1,4 @@
+U->bcaU|@
+R->aU|bcaU|caU|cabaU
+S->Qc|c|cab
+Q->Rb|b

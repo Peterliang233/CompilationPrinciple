@@ -1,9 +1,5 @@
 #include "header.h"
 
-void init();  // init 初始化一些读入的参数
-void eliminateLeftRecursion();  // 消除左递归
-void deal(string s);  // 对从文件读入的字符串进行处理
-void ExecuteLeftCommonFactor(); // 提取左公因子函数
 
 void init(){
     string filename = OUTPUT;
@@ -16,7 +12,7 @@ void init(){
 
     fin.close();
 
-    eliminateLeftRecursion();
+    removeLeftRecursion();
 
     // for(auto x:v){
     //     cout<<x<<":"<<endl;
@@ -53,7 +49,7 @@ void deal(string s){
 
 
 
-void eliminateLeftRecursion(){ 
+void removeLeftRecursion(){ 
     int num=v.size();
     string remain;
     // 遍历每一个非终结符
@@ -83,19 +79,54 @@ void eliminateLeftRecursion(){
     // 遍历最后一个非终结符号
     for(auto x:grammar[v[num-1]]){
         if(x[0]!=v[num-1]){
-            cout<<v[num-1]<<"->"<<x<<"T"<<endl;
+            cout<<v[num-1]<<"->"<<x<<"U"<<endl;
         }else{
             string remain="";
             for(int i=1;i<x.size();i++){
                 remain+=x[i];
             }
-            cout<<"T->"<<remain+"T"<<endl;
+            cout<<"U->"<<remain+"U"<<endl;
         }
     }
 
+    // 一个结尾字符文法
+    cout<<"U->@"<<endl;
+
+    // 将其他非终结符对应的文法重新输入到result.txt文件里面
+    for(int i=0;i<num-1;i++){
+        for(auto x:grammar[v[i]]){
+            cout<<v[i]<<"->"<<x<<endl;
+        }
+    }
+
+    // 将消除左递归的新的文法重新存入一个文件里面
+    string filename = RESULT;
+    ifstream fin1(filename.c_str());
+    string line;
+    // 清空之前的数据
+    mp.clear();
+    for(int i=1;i<=cnt;i++){
+        v1[i].clear();
+    }
+    cnt=0;
+    while(getline(fin1,line)){
+        dealString(line);
+    }
+    // 输出到一个answer.txt文件
+    freopen(ANSWER, "w", stdout);
+    for(int i=1;i<=cnt;i++){
+        cout<<v1[i][0]<<"->";
+        for(int j=1;j<v1[i].size();j++){
+            cout<<v1[i][j];
+            if(j<v1[i].size()-1){
+                cout<<"|";
+            }
+        }
+        cout<<endl;
+    }
 }
 
-void ExecuteLeftCommonFactor() {
-        
+void removeLeftGene() {
+    
 
 }

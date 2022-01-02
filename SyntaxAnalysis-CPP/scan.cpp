@@ -1,10 +1,5 @@
 #include "header.h"
 
-int cnt=0;
-
-void scan();  // 从文本文件里面读取文法
-void dealString(string line); // 处理读入的字符串，转化为一个合法的文法
-void output();  // 将文法输出到一个文件里面
 
 void scan() {
     string filename = INPUT;
