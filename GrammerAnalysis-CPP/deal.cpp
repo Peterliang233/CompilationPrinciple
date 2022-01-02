@@ -264,14 +264,14 @@ bool judge(string s){
     }
 
     str+="#";
-    cout<<str<<endl;
+    //cout<<str<<endl;
     // 处理好了每个表达式之后，我们需要对字符串进行处理，判断是否是合法的表达式
     sk[0]='#';
     int k=0; // k表示的是栈顶的位置
     int id=0;  // id表示的是当前的游标的位置
     int n=str.size();
     while(id<n){
-        cout<<"id: "<<str[id]<<endl;
+        //cout<<"id: "<<str[id]<<endl;
         char a=str[id];
         int j;
         // 如果栈顶指向的是终结符
@@ -294,20 +294,23 @@ bool judge(string s){
                     break;
                 }
             }
-            cout<<j<<" "<<k<<endl;
+            //cout<<j<<" "<<k<<endl;
             // 进行归约操作sk[j+1]...sk[k],规约成一个X
             string tmpc="";
             for(int t=j+1;t<=k;t++){
                 tmpc+=sk[t];
             }
-            cout<<"tmpc: "<<tmpc<<endl;
+            //cout<<"tmpc: "<<tmpc<<endl;
             k=j+1;
-            sk[k]='X';
-            cout<<"ans: ";
-            for(int t=0;t<=k;t++){
-                cout<<sk[t];
+            if(g.count(tmpc)==0){
+                return false;
             }
-            cout<<endl;
+            sk[k]=g[tmpc];
+            // cout<<"ans: ";
+            // for(int t=0;t<=k;t++){
+            //     cout<<sk[t];
+            // }
+            // cout<<endl;
         }
         if(table[make_pair(sk[j],a)]==-1||table[make_pair(sk[j],a)]==0){
             k=k+1;
