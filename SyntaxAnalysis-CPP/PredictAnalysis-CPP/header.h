@@ -6,9 +6,11 @@
 #include <map>
 #include <vector>
 #include <set>
+#include <stack>
 #include <string>
 #define INPUT "input.txt"
 #define OP "operator.txt"
+#define EXPRESSION "expression.txt"
 
 using namespace std;
 
@@ -19,6 +21,8 @@ vector<string> v;          // 用来存储所有的文法
 map<char, set<char>> first, follow; // 表示First集合和Follow集合
 
 map<pair<char,char>,string> table; // 一个预测分析表
+
+stack<char> st; // 用于预测分析程序
 
 void init(); // 初始化从文件里面读入相应的文法
 
@@ -36,5 +40,8 @@ void dfsFirst(char c); // 进行递归操作求解first集合
 void getFollow1(char c); // 进行递归操作求解follow集合第一步
 
 void getFollow2(char); // 求follow集合第二步
+
+
+void analysisString(string line); // 对每个表达式进行预测分析
 
 #endif

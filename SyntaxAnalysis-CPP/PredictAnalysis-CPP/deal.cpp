@@ -164,6 +164,15 @@ void init(){
     // }
     // 求预测分析表
     getPredictTable();
+
+    filename = EXPRESSION;
+
+    ifstream fin2(filename.c_str());
+
+    while(getline(fin2,line)){
+        // 对每个表达式进行预测分析
+        analysisString(line);
+    }
 }
 
 
@@ -221,4 +230,74 @@ void removeLeftCursion(string line){
             tmp+=line[i];
         }
     }
+}
+
+void analysisString(string line){
+    while(!st.empty()){
+        st.pop();
+    }
+    // 先对每个表达式进行处理，都用i进行替换
+    string c="";
+    string tmp="";
+    for(auto x:line){
+        if(op[x]){
+            if(tmp.size()==0){
+                c+=x;
+            }else{
+                c+="i";
+                c+=x;
+            }
+            tmp="";
+        }else{
+            tmp+=x;
+        }
+    }
+
+    if(tmp.size()!=0){
+        c+="i";
+    }
+
+    st.push('#');
+    st.push('E');
+    int id=0;
+    c+="#";
+    bool flag=true;
+    cout<<c<<endl;
+    while(flag){
+        char top=st.top();st.pop();
+        //cout<<top<<" "<<c[id]<<endl;
+        if(op[top]&&top!='#'){
+            if(top==c[id]){
+                id++;
+            }else{
+                puts("false");
+                return;
+            }
+            continue;
+        }
+        //cout<<top<<" "<<c[id]<<" "<<table[make_pair(top,c[id])]<<endl;
+        if(top=='#'){
+            if(top==c[id]) flag=false;
+            else{
+                puts("false");
+                return;
+            }
+            continue;
+        }
+        if(table.count(make_pair(top,c[id]))==0){
+            // 如果没有，那么就是错的表达式，抛出即可
+            puts("false");
+            return;
+        }
+        string e=table[make_pair(top,c[id])];
+        // 如果是空，那么跳过即可
+        if(e=="#"){
+            continue;
+        }
+        int n=e.size();
+        for(int i=n-1;i>=0;i--){
+            st.push(e[i]);
+        }
+    }
+    puts("true");
 }
