@@ -29,6 +29,8 @@ void getFirstAndFollow(); // 得到First集合得到Follow集合
 
 void dfsFirst(char c); // 进行递归操作求解first集合
 
-void dfsFollow(char c); // 进行递归操作求解follow集合
+void getFollow1(char c); // 进行递归操作求解follow集合第一步
+
+void getFollow2(char); // 求follow集合第二步
 
 #endif

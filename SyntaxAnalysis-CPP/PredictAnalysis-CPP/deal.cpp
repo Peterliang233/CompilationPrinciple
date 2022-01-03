@@ -32,18 +32,44 @@ void dfsFirst(char c){
 }
 
 
-// void dfsFollow(char c){
-//     for(auto x:mp[c]){
-//         if(op[x[0]]){
-//             follow[c].insert(x[0]);
-//         }else{
-//             dfsFollow(x[0]);
-//             for(auto y:follow[x[0]]){
-//                 follow[c].insert(y);
-//             }
-//         }
-//     }
-// }
+void getFollow1(char c){
+    // 先把#加入到follow集合里面
+    follow[c].insert('#');
+    // 遍历c的每个文法
+    bool flag=false; // 表示的是这个字符后续都是一个空的
+    for(auto x:mp[c]){
+        int n=x.size();
+        // 把每个非终结符后面的非终结符的first集合加入到这个非终结符的follow集合里面
+        for(int i=0;i<n-1;i++){
+            // 如果两个都是非终结符
+            if(!op[x[i]]){
+                if(!op[x[i+1]]){
+                    for(auto y:first[x[i+1]]){
+                        follow[x[i]].insert(y);
+                    }
+                }else{
+                    follow[x[i]].insert(x[i+1]);
+                }
+                
+            }
+        }
+    }
+}
+
+void getFollow2(char c){
+    for(auto x:mp[c]){
+        int n=x.size();
+        for(int i=n-1;i>=0;i--){
+            // 如果遇到了终结符，那么第三条规则就失效了
+            if(op[x[i]]){
+                break;
+            }
+            for(auto y:follow[c]){
+                follow[x[i]].insert(y);
+            }
+        }
+    }
+}
 
 
 void getFirstAndFollow(){
@@ -58,9 +84,19 @@ void getFirstAndFollow(){
         }
     }
     // 得到follow集合
-    // for(auto x:mp){
-    //     dfsFollow(x.first);
-    // }
+    for(auto x:mp){
+        getFollow1(x.first);
+    }
+
+    for(auto x:mp){
+        getFollow2(x.first);
+    }
+
+    for(auto x:mp){
+        for(auto y:follow[x.first]){
+            cout<<x.first<<" "<<y<<endl;
+        }
+    }
 }
 
 
