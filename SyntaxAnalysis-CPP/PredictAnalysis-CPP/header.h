@@ -18,6 +18,8 @@ vector<string> v;          // 用来存储所有的文法
 
 map<char, set<char>> first, follow; // 表示First集合和Follow集合
 
+map<pair<char,char>,string> table; // 一个预测分析表
+
 void init(); // 初始化从文件里面读入相应的文法
 
 void deal(string line); // 对每个输入的文法进行处理
@@ -25,6 +27,8 @@ void deal(string line); // 对每个输入的文法进行处理
 void removeLeftCursion(string line); // 对文法消除左递归操作
 
 void getFirstAndFollow(); // 得到First集合得到Follow集合
+
+void getPredictTable(); // 获得预测分析表
 
 
 void dfsFirst(char c); // 进行递归操作求解first集合

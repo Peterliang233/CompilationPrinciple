@@ -78,11 +78,12 @@ void getFirstAndFollow(){
     for(auto x:mp){
         dfsFirst(x.first);
     }
-    for(auto x:mp){
-        for(auto y:first[x.first]){
-            cout<<x.first<<" "<<y<<endl;
-        }
-    }
+    // for(auto x:mp){
+    //     for(auto y:first[x.first]){
+    //         cout<<x.first<<" "<<y<<endl;
+    //     }
+    // }
+
     // 得到follow集合
     for(auto x:mp){
         getFollow1(x.first);
@@ -92,11 +93,50 @@ void getFirstAndFollow(){
         getFollow2(x.first);
     }
 
+    // for(auto x:mp){
+    //     for(auto y:follow[x.first]){
+    //         cout<<x.first<<" "<<y<<endl;
+    //     }
+    // }
+}
+
+
+void getPredictTable(){
+    // 遍历所有的非终结符
     for(auto x:mp){
-        for(auto y:follow[x.first]){
-            cout<<x.first<<" "<<y<<endl;
+        // 遍历这个非终结符的first集合
+        for(auto y:first[x.first]){
+            if(y=='#'){
+                table[make_pair(x.first,y)]="#";
+            }else{
+                // 遍历这个x.first的所有的产生式，包含字符y的就是了
+                bool flag=false;
+                string tmp="";
+                for(auto z:mp[x.first]){
+                    tmp=z;
+                    if(z.find(y)!=string::npos){
+                        table[make_pair(x.first,y)]=z;
+                        flag=true;
+                        break;
+                    }
+                }
+                if(!flag){
+                    table[make_pair(x.first,y)]=tmp;
+                }
+            }
+        }
+        // 执行第三条规则，如果first集合里面有#，那么所有的follow的元素都需要加上这个
+        if(first[x.first].find('#')!=first[x.first].end()){
+            for(auto y:follow[x.first]){
+                table[make_pair(x.first,y)]="#";
+            }
         }
     }
+
+
+    // for(auto x:table){
+    //     cout<<x.first.first<<" "<<x.first.second<<" "<<x.second<<endl;
+    // }
 }
 
 
@@ -114,6 +154,7 @@ void init(){
     while(getline(fin1,line)){
         op[line[0]]=true;
     }
+    // 接下来就是求First和Follow集合
     getFirstAndFollow();
 
     // for(auto x:mp){
@@ -121,10 +162,8 @@ void init(){
     //         cout<<x.first<<" "<<y<<endl;
     //     }
     // }
-    // 接下来就是求First和Follow集合
-
     // 求预测分析表
-
+    getPredictTable();
 }
 
 
