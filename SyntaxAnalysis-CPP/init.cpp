@@ -125,8 +125,3 @@ void removeLeftRecursion(){
         cout<<endl;
     }
 }
-
-void removeLeftGene() {
-    
-
-}

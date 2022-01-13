@@ -6,7 +6,7 @@ void init(); // 初始化读入字符串
 void InsertFirst(char key, char val); // 执行First插入操作
 void InsertLast(char key,char val);  // 执行Last插入操作
 
-void getFirst(); // 获得First集合
+void getFirstAndFollow(); // 获得First集合
 void getLast(); // 获得Last集合
 
 void getPriorityTable(); // 获取优先分析表
@@ -62,7 +62,7 @@ void init(){
 
 
 
-    getFirst();
+    getFirstAndFollow();
     getLast();
     getPriorityTable();
 
@@ -100,7 +100,7 @@ void InsertFirst(char key,char val){
 }
 
 
-void getFirst(){
+void getFirstAndFollow(){
     // 求First集合
 
     // 进行初始化操作
